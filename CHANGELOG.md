@@ -1,14 +1,18 @@
 # Changelog
 
-[Unreleased]: https://github.com/ranvis/php-ext-cbor/compare/v0.4.9...HEAD
+[Unreleased]: https://github.com/ranvis/php-ext-cbor/compare/v0.4.10...HEAD
 ## [Unreleased]
 ### Added
 ### Changed
 ### Removed
 ### Fixed
-- Fix decoding with `'string_ref'` shares an instance of `XString` for the same string.
 ### Security
 ### Deprecated
+
+[0.4.10]: https://github.com/ranvis/php-ext-cbor/compare/v0.4.9..v0.4.10
+## [0.4.10] - 2024-09-12
+### Fixed
+- Fix decoding with `'string_ref'` shares an instance of `XString` for the same string.
 
 [0.4.9]: https://github.com/ranvis/php-ext-cbor/compare/v0.4.8..v0.4.9
 ## [0.4.9] - 2023-11-14

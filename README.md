@@ -49,7 +49,7 @@ function cbor_decode(
     ?array $options = null,
 ): mixed;
 ```
-Encodes to or decodes from a CBOR data item.
+Encodes to or decodes from a CBOR data item string.
 
 ```php
 try {
@@ -257,11 +257,11 @@ CBOR `float` has three sizes. 64-bit values are translated to PHP `float`.
 32-bit values and 16-bit values are decoded to PHP `Cbor\Float32` and `Cbor\Float16` respectively (derived from `Cbor\FloatX`).
 But if the flags `CBOR_FLOAT32` and/or `CBOR_FLOAT16` are passed, they are decoded to PHP `float`.
 
-When encoding PHP `float`, values are stored with 64-bit value.
+When encoding PHP `float`, values are stored as 64-bit value.
 If either of the flags is specified, values are stored in that size.
 If both flags are set, the smallest possible type is used; therefore no informational loss is expected.
 
-For `Cbor\Float32` type, the size of the value is retained even if it can be expressed in half-precision type. The `CBOR_CDE` flag overrides this behavior to enforce the requirements.
+For `Cbor\Float32` type, the size of the value is retained even if it can be expressed in half-precision type on encoding. The `CBOR_CDE` flag overrides this behavior to enforce the CDE requirements.
 
 #### Strings
 
@@ -270,7 +270,7 @@ PHP `string` type does not have this distinction.
 
 If you specify the `CBOR_BYTE` flag (default) and/or the `CBOR_TEXT` flag on decoding, those strings are decoded to PHP `string`. If the flags are not specified, strings are decoded to `Cbor\Byte` and `Cbor\Text` objects respectively (derived from `Cbor\XString`).
 
-On encoding PHP `string`, you must specify either of the flags so that the extension can encode strings to CBOR strings. The default is `CBOR_BYTE`.
+On encoding PHP `string`, you must specify either of the flags so that the extension can encode strings to CBOR strings. The default value for the flags parameter is `CBOR_BYTE`.
 
 The flags `CBOR_KEY_BYTE` and `CBOR_KEY_TEXT` are for strings of CBOR `map` keys.
 
@@ -418,12 +418,12 @@ Constants:
 
 The tag {stringref} is like a compression, that "references" the string previously appeared inside {stringref-namespace} tag. Note that it differs from PHP's reference to `string`; i.e. _not_ the concept of `$stringRef = &$string`.
 
-On encode, it can save payload size by replacing the string already seen with the tag + index (or at the worst case increase by 3-bytes overall when single-namespaced).
+On encode, it can save payload size by replacing the string already seen with the tag + index (or at the worst case increase by 3 bytes overall when single-namespaced).
 
 Note that if smaller payload is desired, it should perform better to apply a data compression instead of this tag.
-Also, for maps, small `integer` keys (`1`..`23`, `-1`..`-24` are all 1-byte key) are often used to minimize a payload. You may want to avoid defining key `0` as it sometimes means the empty as a data definition convention. And also because when working with `CBOR_MAP_AS_ARRAY` flag, it can transform array to a "list" array in PHP.
+Also, for maps, small `integer` keys (`1`..`23`, `-1`..`-24` are all 1-byte key) are often used to minimize a payload. You may want to avoid defining key `0` as it sometimes means the empty as a data definition convention. And also because when working with `CBOR_MAP_AS_ARRAY` flag, it can transform array to a "list" array in PHP, which cannot be encoded back to CBOR `map`.
 
-On decode, the use of tag can save memory of decoded value because of copy-on-write; PHP can share the identical `string` sequences until one of them is going to be modified.
+On decode, the use of tag can save some consumption of memory because of copy-on-write; PHP can share the identical `string` sequences until one of them is going to be modified.
 
 For decoding, the option is enabled as `true` by default, while encoding it should be specified explicitly.
 
