@@ -266,6 +266,9 @@ static bool xstring_copy_properties(zend_object *obj, zend_prop_purpose purpose,
 	switch (purpose) {
 	case ZEND_PROP_PURPOSE_DEBUG:
 	case ZEND_PROP_PURPOSE_ARRAY_CAST:
+#if !TARGET_PHP_API_LT_84
+	case ZEND_PROP_PURPOSE_GET_OBJECT_VARS:
+#endif
 		view = true;
 		break;
 	case ZEND_PROP_PURPOSE_SERIALIZE:
@@ -809,6 +812,9 @@ static bool floatx_copy_properties(zend_object *obj, zend_prop_purpose purpose, 
 	switch (purpose) {
 	case ZEND_PROP_PURPOSE_DEBUG:
 	case ZEND_PROP_PURPOSE_ARRAY_CAST:
+#if !TARGET_PHP_API_LT_84
+	case ZEND_PROP_PURPOSE_GET_OBJECT_VARS:
+#endif
 		decode = true;
 		break;
 	case ZEND_PROP_PURPOSE_SERIALIZE:
